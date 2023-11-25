@@ -5,9 +5,11 @@ import { nanoid } from 'nanoid';
 import { useAddContactsMutation, useGetContactsQuery } from 'redux/contactOperation/contactOperation';
 
 const ContactForm = () => {
+
+  
   
   const {data} = useGetContactsQuery()
-  const [addContact , {isLoading}] = useAddContactsMutation()
+  const [addContact] = useAddContactsMutation()
 
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');

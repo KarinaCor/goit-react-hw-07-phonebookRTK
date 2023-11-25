@@ -8,7 +8,7 @@ import { useDeleteContactsMutation, useGetContactsQuery } from 'redux/contactOpe
 const ContactList = () => {
   
   const {data} = useGetContactsQuery()
- const [deleteContact , {isLoading}] = useDeleteContactsMutation()
+ const [deleteContact] = useDeleteContactsMutation()
   
   const filter = useSelector(getFilter);
   const getFilteredContact = data?.filter(({ name }) =>

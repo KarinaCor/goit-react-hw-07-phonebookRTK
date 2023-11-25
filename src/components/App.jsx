@@ -1,13 +1,13 @@
-import { getContacts } from 'redux/contact/contact.selector';
+
 import * as SC from './App.styled';
-import { useSelector } from 'react-redux';
+
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
 import { useGetContactsQuery } from 'redux/contactOperation/contactOperation';
 
 export const App = () => {
-  const {data} = useGetContactsQuery()
+  const { data } = useGetContactsQuery()
 
   return (
     <SC.Wrapper>
