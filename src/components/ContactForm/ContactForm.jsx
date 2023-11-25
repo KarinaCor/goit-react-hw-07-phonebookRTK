@@ -1,65 +1,54 @@
-
+import { useState } from 'react';
 import * as SC from './ContactForm.styled';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContacts } from 'redux/contact/contact.reducer';
-import { getContacts } from 'redux/contact/contact.selector';
+
 import { nanoid } from 'nanoid';
-import { fetchContactDetails } from 'redux/contactDetails/contactDetails';
-import { useEffect } from 'react';
+import { useAddContactsMutation, useGetContactsQuery } from 'redux/contactOperation/contactOperation';
 
-const ContactForm = ({ handleSubmit }) => {
-  const {contactId} = useParams()
-  const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
- 
+const ContactForm = () => {
+  
+  const {data} = useGetContactsQuery()
+  const [addContact , {isLoading}] = useAddContactsMutation()
 
-  // const [name, setName] = useState('');
-  // const [number, setNumber] = useState('');
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  const contactsDetails = useSelector(state => state.phonebook.contactsDetails);
-  const isLoading = useSelector(state => state.phonebook.isLoading);
-  const error = useSelector(state => state.phonebook.error);
-
-  useEffect(() => {
-    dispatch(fetchContactDetails(contactId))
-  },[contactId, dispatch])
-
-  handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    
 
-    const hasDuplicates = contacts.some(
+    const hasDuplicates = data?.some(
       contacts => contacts.name.toLowerCase() === name.toLowerCase()
     );
 
-  //   if (hasDuplicates) {
-  //     alert(`${name} is already in contacts!`);
-  //     return;
-  //   }
-  //   const newContact = {
-  //     name,
-  //     number,
-  //     id: nanoid(),
-  //   };
-  //   dispatch(addContacts(newContact));
-  //   setName('');
-  //   setNumber('');
-  // };
+    if (hasDuplicates) {
+      alert(`${name} is already in contacts!`);
+      return;
+    }
+    const newContact = {
+      name,
+      phone:number,
+      id: nanoid(),
+    };
+    await addContact(newContact)
+    setName('');
+    setNumber('');
+  };
 
-  // const handleChange = evt => {
-  //   const { name, value } = evt.target;
-  //   switch (name) {
-  //     case 'name': {
-  //       setName(value);
-  //       return;
-  //     }
-  //     case 'number': {
-  //       setNumber(value);
-  //       return;
-  //     }
-  //     default:
-  //       return;
-  //   }
-  // };
+  const handleChange = evt => {
+    const { name, value } = evt.target;
+    switch (name) {
+      case 'name': {
+        setName(value);
+        return;
+      }
+      case 'number': {
+        setNumber(value);
+        return;
+      }
+      default:
+        return;
+    }
+  };
 
   return (
     <SC.Form onSubmit={handleSubmit}>
@@ -69,7 +58,7 @@ const ContactForm = ({ handleSubmit }) => {
           onChange={handleChange}
           type="text"
           name="name"
-          value={}
+          value={name}
           pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           required
         />

@@ -11,27 +11,23 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { contactsDetailsReducer } from './contactDetails/contactDetails';
+import { contactsApi } from './contactOperation/contactOperation';
 
-const contactsConfig = {
-  key: 'contacts',
-  storage,
-  whitelist: ['contacts'],
-};
+
+const middleware = getDefaultMiddleware => [
+  ...getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
+  contactsApi.middleware,
+];
 
 export const store = configureStore({
   reducer: {
-    // [contactsSlice.name]: persistReducer(contactsConfig, contactsSlice.reducer),
-    // [filterSlice.name]: filterSlice.reducer,
-    phonebook: contactsDetailsReducer
+    [contactsApi.reducerPath]: contactsApi.reducer,
+    [filterSlice.name]: filterSlice.reducer,
+    
   },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+middleware
 });
-
-export const persistor = persistStore(store);

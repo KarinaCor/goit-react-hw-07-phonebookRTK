@@ -4,9 +4,10 @@ import { useSelector } from 'react-redux';
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
+import { useGetContactsQuery } from 'redux/contactOperation/contactOperation';
 
 export const App = () => {
-  const contacts = useSelector(getContacts);
+  const {data} = useGetContactsQuery()
 
   return (
     <SC.Wrapper>
@@ -15,7 +16,7 @@ export const App = () => {
 
       <SC.Title>Contacts</SC.Title>
 
-      {contacts.length !== 0 ? (
+      {data?.length !== 0 ? (
         <>
           <Filter />
           <ContactList />
