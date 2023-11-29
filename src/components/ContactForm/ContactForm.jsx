@@ -68,7 +68,7 @@ const ContactForm = () => {
       <SC.Label>
         Number
         <SC.Input
-          type="tel"
+          type="text"
           name="number"
           value={number}
           onChange={handleChange}

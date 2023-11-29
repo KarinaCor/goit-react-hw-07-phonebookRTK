@@ -14,7 +14,7 @@ const ContactList = () => {
   const getFilteredContact = data?.filter(({ name }) =>
     name.toLowerCase().includes(filter)
   );
-
+console.log(data);
   return (
     
   
